@@ -1,4 +1,4 @@
-package diffutils;
+package com.example.test.diffutils;
 
 /**
  * The LCSDiffAlgorithm class implements the DiffAlgorithm interface

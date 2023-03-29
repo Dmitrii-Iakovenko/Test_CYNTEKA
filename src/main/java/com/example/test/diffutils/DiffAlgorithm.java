@@ -1,4 +1,4 @@
-package diffutils;
+package com.example.test.diffutils;
 
 /**
  * The DiffAlgorithm interface defines a method for calculating

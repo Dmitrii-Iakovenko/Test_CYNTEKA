@@ -1,6 +1,9 @@
-package diffutils;
+package com.example.test.diffutils.integration;
 
+import com.example.test.diffutils.MatchAlgorithm;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,16 +11,18 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class GreedyMatchAlgorithmIT {
+@SpringBootTest
+class GreedyMatchAlgorithmTest {
 
-    private final DiffAlgorithm<String> diff = new LCSDiffAlgorithm();
-    private final GreedyMatchAlgorithm<String> greedyMatchAlgorithm = new GreedyMatchAlgorithm<>(diff, "?");
+    @Autowired
+    private MatchAlgorithm<String> matchAlgorithm;
+
 
     @Test
     void testEmptyArrays() {
         String[] source = {};
         String[] target = {};
-        Map<String, String> actual = greedyMatchAlgorithm.match(source, target);
+        Map<String, String> actual = matchAlgorithm.match(source, target);
         assertTrue(actual.isEmpty(), "Result should be an empty map when both arrays are empty");
     }
 
@@ -31,7 +36,7 @@ class GreedyMatchAlgorithmIT {
         expected.put("banana", "banana");
         expected.put("cherry", "cherry");
 
-        Map<String, String> actual = greedyMatchAlgorithm.match(source, target);
+        Map<String, String> actual = matchAlgorithm.match(source, target);
 
         assertEquals(3, actual.size(), "Result should have 3 entries for identical arrays");
         assertEquals(expected, actual, "All keys should be equal to their corresponding values for identical arrays");
@@ -47,7 +52,7 @@ class GreedyMatchAlgorithmIT {
         expected.put("banana", "banana");
         expected.put("cherry", "cherry");
 
-        Map<String, String> actual = greedyMatchAlgorithm.match(source, target);
+        Map<String, String> actual = matchAlgorithm.match(source, target);
 
         assertEquals(3, actual.size(), "Result should have 3 entries for overlapping arrays");
         assertEquals(expected, actual, "All keys should be equal to their corresponding values for overlapping arrays");
@@ -63,7 +68,7 @@ class GreedyMatchAlgorithmIT {
         expected.put("banana", "?");
         expected.put("cherry", "cherry");
 
-        Map<String, String> actual = greedyMatchAlgorithm.match(source, target);
+        Map<String, String> actual = matchAlgorithm.match(source, target);
 
         assertEquals(3, actual.size(), "Result should have 3 entries for arrays of different lengths");
         assertEquals(expected, actual, "All keys should be equal to their corresponding values for arrays of different lengths");
@@ -79,7 +84,7 @@ class GreedyMatchAlgorithmIT {
         expected.put("cherry", "cherry");
         expected.put("banana", "?");
 
-        Map<String, String> actual = greedyMatchAlgorithm.match(source, target);
+        Map<String, String> actual = matchAlgorithm.match(source, target);
 
         assertEquals(3, actual.size(), "Result should have 3 entries for arrays of different lengths");
         assertEquals(expected, actual, "All keys should be equal to their corresponding values for arrays of different lengths");
@@ -96,7 +101,7 @@ class GreedyMatchAlgorithmIT {
         expected.put("краска синяя", "краска");
         expected.put("ведро для воды", "корыто для воды");
 
-        Map<String, String> actual = greedyMatchAlgorithm.match(source, target);
+        Map<String, String> actual = matchAlgorithm.match(source, target);
 
         assertEquals(4, actual.size(), "Result should have 4 entries for arrays of different lengths");
         assertEquals(expected, actual, "All keys should be equal to their corresponding values for Example1");
@@ -110,7 +115,7 @@ class GreedyMatchAlgorithmIT {
         Map<String, String> expected = new LinkedHashMap<>();
         expected.put("Бетон с присадкой", "Цемент");
 
-        Map<String, String> actual = greedyMatchAlgorithm.match(source, target);
+        Map<String, String> actual = matchAlgorithm.match(source, target);
 
         assertEquals(1, actual.size(), "Result should have 4 entries for arrays of different lengths");
         assertEquals(expected, actual, "All keys should be equal to their corresponding values for Example2");
@@ -125,7 +130,7 @@ class GreedyMatchAlgorithmIT {
         expected.put("Бетон с присадкой", "присадка для бетона");
         expected.put("доставка", "?");
 
-        Map<String, String> actual = greedyMatchAlgorithm.match(source, target);
+        Map<String, String> actual = matchAlgorithm.match(source, target);
 
         assertEquals(2, actual.size(), "Result should have 4 entries for arrays of different lengths");
         assertEquals(expected, actual, "All keys should be equal to their corresponding values for Example3");

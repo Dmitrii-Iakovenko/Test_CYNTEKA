@@ -1,4 +1,4 @@
-package diffutils;
+package com.example.test.diffutils;
 
 import java.util.Map;
 

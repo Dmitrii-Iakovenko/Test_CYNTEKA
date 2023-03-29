@@ -1,4 +1,4 @@
-package diffutils;
+package com.example.test.diffutils;
 
 import org.junit.jupiter.api.Test;
 

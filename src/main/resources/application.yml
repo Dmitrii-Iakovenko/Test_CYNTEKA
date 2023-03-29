@@ -1,0 +1,6 @@
+app:
+    files:
+        input: "input.txt"
+        output: "output.txt"
+    match-algorithm:
+        placeholder: "?"

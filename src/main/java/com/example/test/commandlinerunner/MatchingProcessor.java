@@ -1,19 +1,21 @@
-import diffutils.DiffAlgorithm;
-import diffutils.GreedyMatchAlgorithm;
-import diffutils.LCSDiffAlgorithm;
-import diffutils.MatchAlgorithm;
+package com.example.test.commandlinerunner;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import com.example.test.config.AppProps;
+import com.example.test.diffutils.MatchAlgorithm;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+import java.io.*;
 import java.util.Map;
 
-public class Main {
-    private static final String FILE_INPUT = "input.txt";
-    private static final String FILE_OUTPUT = "output.txt";
-    private static final String ZERO = "?";
+@Component
+@RequiredArgsConstructor
+public class MatchingProcessor implements CommandLineRunner {
+
+    private final MatchAlgorithm<String> matchAlgorithm;
+    private final AppProps props;
+
 
     /**
      * The main method serves as the entry point for the program.
@@ -23,13 +25,12 @@ public class Main {
      *
      * @param args Command-line arguments, not used in this program.
      */
-    public static void main(String[] args) {
-        try(BufferedReader reader = new BufferedReader(new FileReader(FILE_INPUT))) {
+    @Override
+    public void run(String... args) throws Exception {
+        try(BufferedReader reader = new BufferedReader(new FileReader(props.files().input()))) {
             String[] source = readArrayFromFile(reader);
             String[] target = readArrayFromFile(reader);
 
-            DiffAlgorithm<String> diff = new LCSDiffAlgorithm();
-            MatchAlgorithm<String> matchAlgorithm = new GreedyMatchAlgorithm<>(diff, ZERO);
             Map<String, String> match = matchAlgorithm.match(source, target);
 
             writePairToFile(match);
@@ -45,7 +46,7 @@ public class Main {
      * @return An array of strings read from the file.
      * @throws IOException If there is a problem reading from the file.
      */
-    private static String[] readArrayFromFile(BufferedReader reader) throws IOException {
+    private String[] readArrayFromFile(BufferedReader reader) throws IOException {
         int n = Integer.parseInt(reader.readLine());
         String[] result = new String[n];
         for (int i = 0; i < n; i++) {
@@ -60,13 +61,12 @@ public class Main {
      * @param pairs The map of string pairs to write to the output file.
      * @throws IOException If there is a problem writing to the file.
      */
-    private static void writePairToFile(Map<String, String> pairs) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_OUTPUT))) {
+    private void writePairToFile(Map<String, String> pairs) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(props.files().output()))) {
             for (Map.Entry<String, String> pair : pairs.entrySet()) {
                 writer.write(pair.getKey() + ":" + pair.getValue());
                 writer.newLine();
             }
         }
     }
-
 }
